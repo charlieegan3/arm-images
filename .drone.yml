@@ -1,0 +1,21 @@
+---
+kind: pipeline
+name: alpine-curl
+
+platform:
+  arch: arm
+
+steps:
+- name: set-tags
+  image: busybox
+  commands:
+  - echo -n "$DRONE_COMMIT" > .tags
+- name: deploy
+  image: plugins/docker
+  settings:
+    repo: charlieegan3/alpine-curl
+    username: charlieegan3
+    password:
+      from_secret: DOCKER_PASSWORD
+    dockerfile: alpine-curl/Dockerfile
+    context: alpine-curl
